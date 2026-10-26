@@ -1,0 +1,19 @@
+Sound effects
+- Kenney (www.kenney.nl) — Impact Sounds, Interface Sounds, RPG Audio. License: CC0.
+- OpenGameArt.org, CC0 (http://creativecommons.org/publicdomain/zero/1.0/):
+  bark_*  — "dog barking mono" by HaelDB (CC0 / OGA-BY 3.0, used under CC0)
+  growl_0 — "dog growl" by bonebrah
+  meow_0  — "Meow" by IgnasD
+  meow_1, meow_2 — "cat purr meow" by Kerzoven
+  flap_*, flock_0 — made from "large wings flap" (wings_flap_large)
+  skate_0, waterfall_0 — "30 CC0 SFX loops" (rolling, water_flowing)
+- coo_* — synthesized for this game.
+- engine_0 — "racing car engine sound loops" (loop_0) on OpenGameArt.org, CC0.
+- blizzard_winter.ogg — user-provided winter wind with ice particles, used as the winter blizzard loop.
+- horn_0, horn_1 — cut from "Car honking at 90 km/h #3" (BigSoundBank, s3438), CC0.
+- fanfare_0 — "Victory" (2A03 victory fanfare) by celestialghost8, OpenGameArt.org, CC0.
+- firework_0..2 — fw_01, fw_03, fw_06 from "25 CC0 bang / firework SFX" by rubberduck, OpenGameArt.org, CC0.
+- moo_0..2 — cut from "Cow moos #3" (BigSoundBank, s2383), CC0; _1/_2 are pitch-shifted copies.
+- neigh_0..2 — cut from "Horse Neighing #3" (BigSoundBank, s0863), CC0; _1/_2 are pitch-shifted copies.
+- crow_0..2 — "Crow caw" by zeroisnotnull, OpenGameArt.org, CC0; _1/_2 are pitch-shifted copies.
+- vulture_0, vulture_1 — the two calls of "Vulture Imitation" by AntumDeluge, OpenGameArt.org, CC0.

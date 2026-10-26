@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Drop &amp; Deliver: Chaos!</title>
+    <style>
+      @font-face {
+        font-family: 'Rubik';
+        src: url('fonts/rubik.woff') format('woff');
+        font-weight: 300 900;
+        font-display: swap;
+      }
+      /* Studio splash (Frost Glow Games): Ursa Major constellation drawn in SVG + CSS animation, shown before the game scripts load. */
+      #studio-splash {
+        position: fixed; inset: 0; z-index: 100; overflow: hidden; cursor: pointer;
+        background: radial-gradient(ellipse at 50% 40%, #10243c 0%, #071121 55%, #02050b 100%);
+        display: flex; align-items: center; justify-content: center;
+      }
+      #studio-splash .fg-art { width: min(90vw, 110vmin); aspect-ratio: 4 / 3; opacity: 0; }
+      #studio-splash .fg-art svg { display: block; width: 100%; height: 100%; overflow: visible; }
+      #studio-splash svg * { transform-box: fill-box; transform-origin: center; }
+      #studio-splash .fg-line { stroke-dasharray: 1 1; stroke-dashoffset: 1; stroke-opacity: 0.7; }
+      #studio-splash .fg-ptr { stroke-dasharray: 0.04 0.03; stroke-dashoffset: 0; opacity: 0; stroke: #ffc98a; }
+      #studio-splash .fg-star, #studio-splash .fg-polar { opacity: 0; transform: scale(0); }
+      #studio-splash .fg-glow, #studio-splash .fg-txt { opacity: 0; }
+      #studio-splash .fg-bgs circle { opacity: 0.2; }
+      #studio-splash.go .fg-art { animation: fg-fade 3.9s ease-in-out forwards; }
+      #studio-splash.go { animation: fg-out 0.3s ease-in 3.9s forwards; }
+      #studio-splash.go .fg-glow { animation: fg-show 1.5s ease-out 0.1s forwards; }
+      #studio-splash.go .fg-star { animation: fg-starin 0.5s cubic-bezier(.2,1.4,.4,1) var(--d) forwards; }
+      #studio-splash.go .fg-tw { animation: fg-tw 2.6s ease-in-out infinite; animation-duration: var(--t); }
+      #studio-splash.go .fg-line { animation: fg-draw 0.3s ease-out var(--d) forwards; }
+      #studio-splash.go .fg-ptr { animation: fg-ptr 0.5s ease-out var(--d) forwards; }
+      #studio-splash.go .fg-polar { animation: fg-starin 0.6s cubic-bezier(.2,1.4,.4,1) var(--d) forwards; }
+      #studio-splash.go .fg-fl { animation: fg-flick 0.8s linear infinite; }
+      #studio-splash.go .fg-fl2 { animation: fg-flick 0.55s linear infinite reverse; }
+      #studio-splash.go .fg-fl-glow { animation: fg-flare 1.15s ease-in-out infinite; }
+      #studio-splash.go .fg-bgs circle { animation: fg-bgtw 2.4s ease-in-out infinite alternate; animation-duration: var(--t); }
+      #studio-splash.go .fg-txt { animation: fg-txt 0.8s ease-out 1.2s forwards; }
+      #studio-splash.go .fg-txt2 { animation-delay: 1.5s; }
+      #studio-splash.skip { animation: fg-out 0.25s ease-in forwards !important; }
+      @keyframes fg-fade { 0% { opacity: 0; } 10% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; } }
+      @keyframes fg-show { to { opacity: 1; } }
+      @keyframes fg-starin { to { opacity: 1; transform: scale(1); } }
+      @keyframes fg-tw { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.75; transform: scale(0.88); } }
+      @keyframes fg-bgtw { from { opacity: 0.12; } to { opacity: 0.7; } }
+      @keyframes fg-draw { to { stroke-dashoffset: 0; } }
+      @keyframes fg-ptr { to { opacity: 0.8; } }
+      @keyframes fg-flick { 0%, 100% { transform: scale(1, 1) rotate(0deg); } 12% { transform: scale(0.9, 1.1) rotate(4deg); } 27% { transform: scale(1.08, 0.92); } 41% { transform: scale(0.94, 1.12) rotate(-4deg); } 58% { transform: scale(1.05, 0.95); } 73% { transform: scale(0.92, 1.07) rotate(2deg); } }
+      @keyframes fg-flare { 0%, 100% { opacity: 0.75; transform: scale(1); } 20% { opacity: 1; transform: scale(1.15); } 45% { opacity: 0.6; transform: scale(0.92); } 70% { opacity: 0.95; transform: scale(1.1); } }
+      @keyframes fg-txt { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+      @keyframes fg-out { to { opacity: 0; visibility: hidden; } }
+      @media (prefers-reduced-motion: reduce) {
+        #studio-splash.go *, #studio-splash.go { animation-duration: 0.01s !important; animation-delay: 0s !important; }
+        #studio-splash.go .fg-tw, #studio-splash.go .fg-fl, #studio-splash.go .fg-fl2, #studio-splash.go .fg-fl-glow, #studio-splash.go .fg-bgs circle { animation: none !important; }
+        #studio-splash.go { animation: fg-out 0.4s ease-in 1.5s forwards !important; }
+        #studio-splash.go .fg-art { animation: fg-fade 1.9s ease-in-out forwards !important; }
+      }
+    </style>
+    <link rel="preload" href="fonts/rubik.woff" as="font" type="font/woff" crossorigin />
+    <link rel="preload" href="logo/drop-deliver-chaos.png" as="image" />
+    <script type="module" crossorigin src="./assets/index-B5GbzfzT.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/three-BlAZDNlb.js">
+    <link rel="modulepreload" crossorigin href="./assets/rapier-DpxwuBBO.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-D4_D70t5.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas"></canvas>
+      <div id="ui-root"></div>
+    </div>
+    <div id="studio-splash" aria-label="Frost Glow Games">
+      <div class="fg-art">
+        <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Frost Glow Games">
+          <defs>
+            <linearGradient id="ft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#a9d2f7"/></linearGradient>
+            <radialGradient id="fh"><stop offset="0" stop-color="#4aa3ff" stop-opacity="0.35"/><stop offset="0.6" stop-color="#2b6fc0" stop-opacity="0.1"/><stop offset="1" stop-color="#2b6fc0" stop-opacity="0"/></radialGradient>
+            <radialGradient id="fg2"><stop offset="0" stop-color="#bfe4ff" stop-opacity="0.8"/><stop offset="1" stop-color="#4aa3ff" stop-opacity="0"/></radialGradient>
+            <radialGradient id="fo"><stop offset="0" stop-color="#ffd98a" stop-opacity="0.95"/><stop offset="0.35" stop-color="#ff9a3c" stop-opacity="0.5"/><stop offset="1" stop-color="#ff7a20" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle class="fg-glow" cx="390" cy="240" r="330" fill="url(#fh)"/>
+          <g class="fg-bgs" fill="#cfe8ff"><circle cx="408" cy="-44" r="1.7" style="--t:2.4s;animation-delay:-0.7s"/><circle cx="453" cy="-29" r="0.8" style="--t:3.5s;animation-delay:-1.9s"/><circle cx="486" cy="-27" r="1.7" style="--t:1.7s;animation-delay:-0.7s"/><circle cx="459" cy="22" r="1.7" style="--t:1.9s;animation-delay:-0.4s"/><circle cx="68" cy="331" r="1" style="--t:2.3s;animation-delay:-1.6s"/><circle cx="-55" cy="-29" r="1" style="--t:2.6s;animation-delay:-1.6s"/><circle cx="688" cy="251" r="1.7" style="--t:2.3s;animation-delay:-0.7s"/><circle cx="67" cy="468" r="0.8" style="--t:2.7s;animation-delay:-1.6s"/><circle cx="790" cy="433" r="1.3" style="--t:2.8s;animation-delay:-0.2s"/><circle cx="412" cy="44" r="1.3" style="--t:1.9s;animation-delay:-1.5s"/><circle cx="-79" cy="391" r="1.3" style="--t:2.3s;animation-delay:-1.1s"/><circle cx="-48" cy="-5" r="1.3" style="--t:2.5s;animation-delay:-2.0s"/><circle cx="-57" cy="414" r="1.7" style="--t:2.2s;animation-delay:-1.2s"/><circle cx="575" cy="-54" r="1.7" style="--t:2.3s;animation-delay:-1.8s"/><circle cx="393" cy="81" r="1.3" style="--t:1.9s;animation-delay:-0.7s"/><circle cx="287" cy="531" r="0.8" style="--t:1.9s;animation-delay:-1.2s"/><circle cx="169" cy="24" r="1.7" style="--t:3.3s;animation-delay:-0.8s"/><circle cx="312" cy="178" r="1.7" style="--t:3.5s;animation-delay:-0.5s"/><circle cx="63" cy="90" r="1" style="--t:1.6s;animation-delay:-2.5s"/><circle cx="70" cy="125" r="1" style="--t:2.4s;animation-delay:-1.1s"/><circle cx="469" cy="588" r="0.8" style="--t:2.5s;animation-delay:-2.6s"/><circle cx="870" cy="400" r="1.7" style="--t:2.4s;animation-delay:-1.2s"/><circle cx="381" cy="206" r="1" style="--t:1.7s;animation-delay:-0.6s"/><circle cx="49" cy="165" r="0.8" style="--t:1.8s;animation-delay:-1.7s"/><circle cx="438" cy="585" r="0.8" style="--t:1.7s;animation-delay:-0.6s"/><circle cx="271" cy="368" r="1.3" style="--t:2.8s;animation-delay:-1.4s"/><circle cx="-0" cy="267" r="1.7" style="--t:2.6s;animation-delay:-0.9s"/><circle cx="30" cy="447" r="1.3" style="--t:2.6s;animation-delay:-2.1s"/><circle cx="417" cy="72" r="1.3" style="--t:1.9s;animation-delay:-1.6s"/><circle cx="-92" cy="294" r="0.8" style="--t:3.0s;animation-delay:-0.8s"/><circle cx="261" cy="45" r="1" style="--t:2.7s;animation-delay:-2.3s"/><circle cx="223" cy="84" r="1" style="--t:3.2s;animation-delay:-2.5s"/><circle cx="649" cy="86" r="1.7" style="--t:2.3s;animation-delay:-0.1s"/><circle cx="-91" cy="123" r="1.3" style="--t:2.0s;animation-delay:-1.8s"/><circle cx="632" cy="171" r="1.3" style="--t:1.8s;animation-delay:-0.3s"/><circle cx="369" cy="163" r="1.7" style="--t:2.8s;animation-delay:-2.7s"/><circle cx="754" cy="261" r="1.3" style="--t:3.2s;animation-delay:-0.3s"/><circle cx="567" cy="558" r="1" style="--t:2.6s;animation-delay:-0.5s"/><circle cx="701" cy="159" r="1.7" style="--t:2.5s;animation-delay:-2.2s"/><circle cx="-32" cy="40" r="1" style="--t:1.7s;animation-delay:-1.8s"/><circle cx="364" cy="383" r="1.7" style="--t:2.9s;animation-delay:-1.1s"/></g>
+          <g class="fg-lines" stroke="#9fd0f7" stroke-width="2" stroke-linecap="round" fill="none"><line class="fg-line" pathLength="1" style="--d:0.37s" x1="120" y1="150" x2="225" y2="172"/><line class="fg-line" pathLength="1" style="--d:0.52s" x1="225" y1="172" x2="320" y2="207"/><line class="fg-line" pathLength="1" style="--d:0.67s" x1="320" y1="207" x2="410" y2="232"/><line class="fg-line" pathLength="1" style="--d:0.82s" x1="410" y1="232" x2="440" y2="332"/><line class="fg-line" pathLength="1" style="--d:0.97s" x1="440" y1="332" x2="600" y2="347"/><line class="fg-line" pathLength="1" style="--d:1.12s" x1="600" y1="347" x2="625" y2="237"/><line class="fg-line" pathLength="1" style="--d:1.35s" x1="625" y1="237" x2="410" y2="232"/><line class="fg-line fg-ptr" pathLength="1" style="--d:1.60s" x1="600" y1="347" x2="668" y2="62"/></g>
+          <g transform="translate(120,150)"><g class="fg-star" style="--d:0.25s"><g class="fg-tw" style="--t:2.5s"><circle r="20.0" fill="url(#fg2)"/><path d="M0,-22.0Q3.1,-3.1 22.0,0Q3.1,3.1 0,22.0Q-3.1,3.1 -22.0,0Q-3.1,-3.1 0,-22.0Z" fill="#e9f6ff"/><circle r="3.6" fill="#fff"/></g></g></g><g transform="translate(225,172)"><g class="fg-star" style="--d:0.40s"><g class="fg-tw" style="--t:2.2s"><circle r="23.0" fill="url(#fg2)"/><path d="M0,-25.3Q3.5,-3.5 25.3,0Q3.5,3.5 0,25.3Q-3.5,3.5 -25.3,0Q-3.5,-3.5 0,-25.3Z" fill="#e9f6ff"/><circle r="4.1" fill="#fff"/></g></g></g><g transform="translate(320,207)"><g class="fg-star" style="--d:0.55s"><g class="fg-tw" style="--t:3.0s"><circle r="24.0" fill="url(#fg2)"/><path d="M0,-26.4Q3.7,-3.7 26.4,0Q3.7,3.7 0,26.4Q-3.7,3.7 -26.4,0Q-3.7,-3.7 0,-26.4Z" fill="#e9f6ff"/><circle r="4.3" fill="#fff"/></g></g></g><g transform="translate(410,232)"><g class="fg-star" style="--d:0.70s"><g class="fg-tw" style="--t:2.1s"><circle r="19.0" fill="url(#fg2)"/><path d="M0,-20.9Q2.9,-2.9 20.9,0Q2.9,2.9 0,20.9Q-2.9,2.9 -20.9,0Q-2.9,-2.9 0,-20.9Z" fill="#e9f6ff"/><circle r="3.4" fill="#fff"/></g></g></g><g transform="translate(440,332)"><g class="fg-star" style="--d:0.85s"><g class="fg-tw" style="--t:2.8s"><circle r="20.0" fill="url(#fg2)"/><path d="M0,-22.0Q3.1,-3.1 22.0,0Q3.1,3.1 0,22.0Q-3.1,3.1 -22.0,0Q-3.1,-3.1 0,-22.0Z" fill="#e9f6ff"/><circle r="3.6" fill="#fff"/></g></g></g><g transform="translate(600,347)"><g class="fg-star" style="--d:1.00s"><g class="fg-tw" style="--t:2.5s"><circle r="23.0" fill="url(#fg2)"/><path d="M0,-25.3Q3.5,-3.5 25.3,0Q3.5,3.5 0,25.3Q-3.5,3.5 -25.3,0Q-3.5,-3.5 0,-25.3Z" fill="#e9f6ff"/><circle r="4.1" fill="#fff"/></g></g></g><g transform="translate(625,237)"><g class="fg-star" style="--d:1.15s"><g class="fg-tw" style="--t:2.1s"><circle r="26.0" fill="url(#fg2)"/><path d="M0,-28.6Q4.0,-4.0 28.6,0Q4.0,4.0 0,28.6Q-4.0,4.0 -28.6,0Q-4.0,-4.0 0,-28.6Z" fill="#e9f6ff"/><circle r="4.7" fill="#fff"/></g></g></g><g transform="translate(243,152)"><g class="fg-star" style="--d:0.50s"><g class="fg-tw" style="--t:2.6s"><circle r="9" fill="url(#fg2)"/><circle r="2" fill="#fff"/></g></g></g>
+          <g transform="translate(668,62)"><g class="fg-polar" style="--d:2.10s"><circle class="fg-fl-glow" r="44" fill="url(#fo)"/><path class="fg-fl" d="M0,-26.0Q3.6,-3.6 26.0,0Q3.6,3.6 0,26.0Q-3.6,3.6 -26.0,0Q-3.6,-3.6 0,-26.0Z" fill="#ffd98a"/><circle class="fg-fl2" r="5" fill="#fff6dc"/></g></g>
+          <g font-family="Rubik, 'Segoe UI', Arial, sans-serif" text-anchor="middle">
+            <text class="fg-txt" x="400" y="438" font-size="78" font-weight="300" letter-spacing="10" fill="url(#ft)">FROST GLOW</text>
+            <g class="fg-txt fg-txt2">
+              <text x="400" y="498" font-size="27" font-weight="400" letter-spacing="22" fill="#8fbbe6">GAMES</text>
+              <g stroke="#6fa3d6" stroke-opacity="0.75" stroke-width="2"><line x1="110" y1="489" x2="270" y2="489"/><line x1="530" y1="489" x2="690" y2="489"/></g>
+              <g fill="#ffc464"><path d="M270,484l5,5l-5,5l-5,-5z"/><path d="M530,484l5,5l-5,5l-5,-5z"/></g>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div id="boot-screen"><div class="boot-logo"><img src="logo/drop-deliver-chaos.png" alt="Drop &amp; Deliver: Chaos!" /></div><div class="boot-bar"></div><div class="boot-text">Загрузка…</div></div>
+    <script>
+      // Boot screen in the player's language (saved setting, else the browser language).
+      (function () {
+        var lang = null;
+        try {
+          var s = JSON.parse(localStorage.getItem('deliverychaos.settings') || 'null');
+          if (s && (s.language === 'ru' || s.language === 'en' || s.language === 'zh')) lang = s.language;
+        } catch (e) {}
+        if (!lang) {
+          var n = (navigator.language || '').toLowerCase();
+          lang = n.indexOf('zh') === 0 ? 'zh' : n.indexOf('ru') === 0 ? 'ru' : 'en';
+        }
+        var t = { ru: ['Drop & Deliver: Chaos!', 'Загрузка…'], en: ['Drop & Deliver: Chaos!', 'Loading…'], zh: ['Drop & Deliver: Chaos!', '加载中…'] }[lang];
+        var img = document.querySelector('#boot-screen img');
+        img.src = 'logo/drop-deliver-chaos.png';
+        img.alt = t[0];
+        document.querySelector('#boot-screen .boot-text').textContent = t[1];
+        document.title = t[0];
+      })();
+    </script>
+    <script>
+      // Studio splash: starts once the logo art is loaded, tap / click / any key skips it, removed when done.
+      (function () {
+        var el = document.getElementById('studio-splash');
+        if (!el) return;
+        try { if (sessionStorage.getItem('deliverychaos.noSplash') === '1') { sessionStorage.removeItem('deliverychaos.noSplash'); el.parentNode.removeChild(el); return; } } catch (e) {}
+        var done = false;
+        var remove = function () {
+          if (done) return;
+          done = true;
+          if (el.parentNode) el.parentNode.removeChild(el);
+        };
+        var skip = function () {
+          if (done) return;
+          el.classList.add('skip');
+          setTimeout(remove, 300);
+        };
+        var started = false;
+        var start = function () {
+          if (started || done) return;
+          started = true;
+          el.classList.add('go');
+          setTimeout(remove, 4700);
+        };
+        start();
+        el.addEventListener('animationend', function (e) { if (e.target === el) remove(); });
+        el.addEventListener('pointerdown', skip);
+        window.addEventListener('keydown', function k() { window.removeEventListener('keydown', k); skip(); });
+      })();
+    </script>
+  </body>
+</html>
